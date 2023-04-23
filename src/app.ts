@@ -1,10 +1,8 @@
 import dotenv from 'dotenv';
 import ExpressAdapter from './infra/http/ExpressAdapter';
+import HttpController from './infra/http/HttpController';
 
 dotenv.config();
 
 const httpServer = new ExpressAdapter();
-httpServer.on('get', '/', () => {
-    return {msg: 'test'};
-})
-httpServer.listen(Number(process.env.PORT));
+new HttpController(httpServer);
