@@ -1,7 +1,7 @@
 {
   "name": "goomer_challenge_restaurant",
   "version": "1.0.0",
-  "description": "Restaurant API to GOOMER backend-challenge",
+  "description": "Restaurant API from GOOMER backend-challenge",
   "main": "app.ts",
   "scripts": {
     "start:dev": "nodemon --watch src/** --ext ts,json' --ignore 'src/**/*.spec.ts' --exec ts-node src/app.ts",
