@@ -1,8 +1,9 @@
-import HttpMethods from "./HttpMethods";
+import HttpMethods from './HttpMethods';
 
 interface HttpServer {
-    on(method: HttpMethods, url: string, callback: Function): void;
-    listen(port: number): void;
+	on(method: HttpMethods, url: string, callback: Function): void;
+	listen(port: number): void;
+	error(fn: Function): void;
 }
 
 export default HttpServer;
