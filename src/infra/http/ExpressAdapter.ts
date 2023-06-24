@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 
 class ExpressAdapter implements HttpServer {
+	
 	constructor(private readonly app = express()) {
 		this.app.use(express.json());
 	}
