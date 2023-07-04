@@ -1,14 +1,16 @@
 import { createClient } from "redis";
+import LoggerProvider from "./LoggerProvider";
+import AppError from "../errors/AppError";
 
 class RedisCacheProvider {
 
     private readonly client;
-    private readonly connected: boolean = false;
 
-    constructor(){
+    constructor() {
         this.client = createClient();
         this.client.on('error', err => {
-            console.log('Redis Client Error', err);
+            LoggerProvider.getInstance().error(`Redis client error: ${err}`);
+            throw new AppError(err);
         });
         this.client.connect();
     }

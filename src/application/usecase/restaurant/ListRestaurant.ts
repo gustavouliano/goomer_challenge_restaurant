@@ -1,21 +1,13 @@
 import Restaurant from "../../../domain/entity/Restaurant";
-import RedisCacheProvider from "../../../infra/provider/RedisCacheProvider";
-import RestaurantRepository from "../../repository/RestaurantRepository";
-
+import InterfaceRestaurantRepository from "../../repository/InterfaceRestaurantRepository";
 
 class ListRestaurant {
 
-    constructor(readonly restaurantRepository: RestaurantRepository){}
+    constructor(readonly repository: InterfaceRestaurantRepository) {}
 
     async execute(): Promise<Restaurant[]> {
-        const redisCache = new RedisCacheProvider();
-        let restaurants = await redisCache.recover<Restaurant[]>('restaurants');
-        if (restaurants){
-            return restaurants;
-        }
-        restaurants = await this.restaurantRepository.findAll();
-        await redisCache.save('restaurants', restaurants);
-        return restaurants;
+        const restaurants = await this.repository.findAll();
+        return restaurants || [];
     }
 }
 

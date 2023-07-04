@@ -1,28 +1,24 @@
 import Restaurant from "../../../domain/entity/Restaurant";
-import RedisCacheProvider from "../../../infra/provider/RedisCacheProvider";
-import RestaurantRepository from "../../repository/RestaurantRepository";
+import InterfaceRestaurantRepository from "../../repository/InterfaceRestaurantRepository";
 
 class UpdateRestaurant {
 
-    constructor(readonly restaurantRepository: RestaurantRepository) {}
+    constructor(readonly repository: InterfaceRestaurantRepository) {}
 
     async execute({id, name}: Input): Promise<Restaurant> {
-        id = Number(id);
         await this.validate(id, name);
-        const restaurant = await this.restaurantRepository.update(id, name);
-        const redisCache = new RedisCacheProvider();
-        redisCache.invalidate('restaurants');
-        return restaurant;
+        const restaurant = await this.repository.update(id, { name });
+        return restaurant!;
     }
-
-    private async validate(id: number, name: string) {
+    
+    private async validate(id: string, name: string) {
         if (!name || typeof name != 'string'){
 			throw new Error('Invalid name input');
 		}
 		if (name.length < 3) {
 			throw new Error('Restaurant name too small');
 		}
-        const restaurant = await this.restaurantRepository.findOne(id);
+        const restaurant = await this.repository.findOne({ id });
         if (!restaurant){
             throw new Error('Restaurant does not exists');
         }
@@ -31,8 +27,8 @@ class UpdateRestaurant {
 }
 
 type Input = {
-    id: number,
-    name: string
+    id: string,
+    name: string,
 };
 
 export default UpdateRestaurant;

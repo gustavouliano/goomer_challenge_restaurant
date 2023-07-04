@@ -1,18 +1,19 @@
-import RestaurantRepository from "../../repository/RestaurantRepository";
+import InterfaceRestaurantRepository from "../../repository/InterfaceRestaurantRepository";
 
 class DeleteRestaurant {
 
-    constructor(readonly restaurantRepository: RestaurantRepository) {}
+    constructor(readonly repository: InterfaceRestaurantRepository) {}
 
-    async execute(id: number){
-        id = Number(id);
-        // await this.validate(id);
-        await this.restaurantRepository.delete(id);
-        return `Restaurant ${id} deleted successfully`;
+    async execute(id: string){
+        await this.validate(id);
+        await this.repository.delete(id);
     }
 
-    private async validate(id: number){
-        // const restaurant = this.restaurantRepository.findOne(id);
+    private async validate(id: string){
+        const restaurant = await this.repository.findOne({ id });
+        if (!restaurant){
+            throw new Error('Restaurant does not exists');
+        }
     }
 
 }
